@@ -6,21 +6,148 @@
     <title>Word Guess Game</title>
 
     <!--Link to Bootstrap-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!--Link to custom CSS-->
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <!--Link to JavaScript-->
-    <script src="assets/javascript/game.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <!--Link to CSS-->
+    <link rel ="stylesheet" href = "assets/css/style.css" type = "text/css">
+    <!--Link to JS-->
+    <script src = "assets/javascript/game.js"></script>
 
 </head>
 
+
 <body>
 
+    <div class="container">
 
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 id="game-title">
+                    Word Guess Game: NFL Hall of Fame: Quarterbacks
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 id="game-directions">
+                    Directions: The space below contains the last name of a Quarterback enshrined in the NFL Hall of
+                    Fame. Use your
+                    knowledge of NFL history and select a letter to fill in the blanks. You may only have 10 incorrect
+                    guesses per
+                    game. Press the "Restart" button to restart the game. Good luck!
+                </h2>
+            </div>
+        </div>
+
+        <br><br>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3 id="game-wins">
+                </h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3 id="game-current-word">
+                </h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3 id="game-user-guess">
+                </h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3 id="game-guess-counter">
+                </h3>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-danger" onclick="gameReset()">Reset Game</button>
+                <button type="button" class="btn btn-secondary">Get a New Word</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        var wordBank = ['aikman', 'blanda', 'bradshaw', 'dawson', 'elway', 'favre', 'fouts', 'graham', 'griese', 'jurgensen', 'kelly', 'layne', 'marino', 'moon', 'montana', 'namath', 'starr', 'staubach', 'tittle', 'unitas', 'warner', 'waterfield', 'young'];
+
+        var randomWord = wordBank[Math.floor(Math.random() * wordBank.length)]
+
+        var currentWord = [];
+        var validateLetter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', "M", "N", 'O', 'P', "Q", 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        var userGuessArray = [];
+        var userCorrectGuess = [];
+        var userIncorrectGuess = [];
+        var winTotal = 0;
+        var maxGuesses = 10;
+        var wins = "Current wins: " + winTotal;
+        var guesses = "Incorrect Guesses Remaining: " + maxGuesses;
+
+
+        for (var i = 0; i < randomWord.length; i++) {
+            currentWord[i] = "_";
+            document.querySelector("#game-current-word").innerHTML = currentWord.join(" ");
+        }
+
+
+        function gameReset() {
+            location.reload();
+        }
+
+        document.querySelector("#game-wins").innerHTML = wins;
+        document.querySelector("#game-guess-counter").innerHTML = guesses;
+
+
+        document.onkeyup = function (event) {
+
+            var userGuess = event.key;
+
+
+            for (var i = 0; i < randomWord.length; i++) {
+                if (randomWord[i] === userGuess) {
+                    currentWord[i] = userGuess;
+                    userCorrectGuess.push(userGuess);
+                    document.querySelector("#game-current-word").innerHTML = currentWord.join(" ");
+                }
+            }
+
+            if (validateLetter.includes(userGuess) && !randomWord.includes(userGuess)) {
+                userIncorrectGuess.push(userGuess);
+                document.querySelector("#game-user-guess").innerHTML = userIncorrectGuess.join(" ");
+                maxGuesses--;
+            } else if (!validateLetter.includes(userGuess)) {
+                alert("Error:  Invalid input.");
+            }
+
+
+            if (currentWord.indexOf("_") === -1) {
+                alert("You win!  You correctly guessed " + randomWord + ".");
+                winTotal++;
+            }
+
+            if (userIncorrectGuess.length === 10) {
+                alert("The word is " + randomWord + ".  You have ran out of guesses.  Try a new word.")
+            }
+
+        }
+
+
+    </script>
 
 </body>
-
-
-
 
 </html>
