@@ -35,7 +35,8 @@
                     Fame. Use your
                     knowledge of NFL history and select a letter to fill in the blanks. You may only have 10 incorrect
                     guesses per
-                    game. Press "Start New Game" to get being a new game. Good luck!
+                    game. Press "Start New Game" to get being a new game. Press "Reset" to reset all of your progress.
+                    Good luck!
                 </h2>
             </div>
         </div>
@@ -75,7 +76,7 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <button type="button" class="btn btn-danger" onclick="gameReset()">Reset Game</button>
-                <button type="button" class="btn btn-primary">Start a New Game</button>
+                <button type="button" class="btn btn-primary" onclick="startNewGame()">Start a New Game</button>
             </div>
         </div>
 
@@ -107,10 +108,33 @@
         document.querySelector("#game-wins").innerHTML = wins;
         document.querySelector("#game-guess-counter").innerHTML = guesses;
 
+        function startNewGame() {
+            maxGuesses = 10;
+            updateGuesses();
+            randomWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+            for (var i = 0; i < randomWord.length; i++) {
+                currentWord[i] = "_";
+                document.querySelector("#game-current-word").innerHTML = currentWord.join(" ");
+            }
+            userIncorrectGuess = [];
+            document.getElementById("game-user-guess").innerHTML = "";
+        }
+
+
 
         function gameReset() {
             alert("This will reset your win total");
             location.reload();
+        }
+
+        function updateWins() {
+            wins = "Current wins: " + winTotal;
+            document.querySelector("#game-wins").innerHTML = wins;
+        }
+
+        function updateGuesses() {
+            guesses = "Incorrect Guesses Remaining: " + maxGuesses;
+            document.querySelector("#game-guess-counter").innerHTML = guesses;
         }
 
 
@@ -121,31 +145,6 @@
 
             var wins = "Current wins: " + winTotal;
             var guesses = "Incorrect Guesses Remaining: " + maxGuesses;
-
-            function updateWins() {
-                document.querySelector("#game-wins").innerHTML = wins;
-            }
-
-            function updateGuesses() {
-                document.querySelector("#game-guess-counter").innerHTML = guesses;
-            }
-
-            function resetGame() {
-                var randomWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-                var currentWord = [];
-                var maxGuesses = 10;
-                var userGuessArray = [];
-                var userCorrectGuess = [];
-                var userIncorrectGuess = [];
-                document.querySelector("#game-wins").innerHTML = wins;
-                document.querySelector("#game-guess-counter").innerHTML = guesses;
-                document.querySelector("#game-user-guess").innherHTML = "";
-                for (var i = 0; i < randomWord.length; i++) {
-                    currentWord[i] = "_";
-                    document.querySelector("#game-current-word").innerHTML = currentWord.join(" ");
-                }
-            }
-
 
             for (var i = 0; i < randomWord.length; i++) {
                 if (randomWord[i] === userGuess) {
@@ -169,16 +168,15 @@
                 alert("You win!  You correctly guessed " + randomWord + ".  Start a new game.");
                 winTotal++;
                 updateWins();
-                resetGame();
             }
 
             if (userIncorrectGuess.length === 10) {
                 alert("The word is " + randomWord + ".  You have ran out of guesses.  Start a new game.");
-                resetGame();
             }
 
 
         }
+
     </script>
 
 </body>
